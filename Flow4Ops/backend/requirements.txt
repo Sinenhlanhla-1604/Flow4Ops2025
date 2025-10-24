@@ -1,0 +1,36 @@
+# Core Framework
+fastapi==0.115.0
+uvicorn[standard]==0.32.0  # ASGI server with auto-reload
+
+# Database & ORM
+sqlalchemy==2.0.36
+alembic==1.14.0  # Database migrations
+psycopg2-binary==2.9.10  # PostgreSQL adapter
+asyncpg==0.30.0  # Async PostgreSQL driver
+
+# Authentication & Security
+python-jose[cryptography]==3.3.0  # JWT tokens
+passlib[bcrypt]==1.7.4  # Password hashing
+python-multipart==0.0.12  # Form data parsing
+pydantic[email]==2.9.2  # Data validation with email support
+pydantic-settings==2.6.1  # Settings management
+
+# Supabase Integration
+supabase==2.9.0  # Official Python client (for Storage, Auth if needed)
+
+# Utilities
+python-dotenv==1.0.1  # Environment variable management
+httpx==0.27.2  # HTTP client for external APIs
+python-dateutil==2.9.0  # Date manipulation
+
+# PDF Generation (for quotes & POs)
+reportlab==4.2.5
+
+# Email (for notifications - Phase 2+)
+fastapi-mail==1.4.1
+
+# Development Tools
+pytest==8.3.3  # Testing framework
+pytest-asyncio==0.24.0  # Async test support
+black==24.10.0  # Code formatter
+ruff==0.7.4  # Fast linter
