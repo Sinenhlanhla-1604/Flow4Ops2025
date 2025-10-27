@@ -14,37 +14,26 @@ export default function LoginPage() {
   const supabase = createClient();
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
+  e.preventDefault();
+  setLoading(true);
+  setError('');
 
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      if (error) throw error;
-      
-      // Get user role to redirect appropriately
-      const { data: userData } = await supabase
-        .from('users')
-        .select('role')
-        .eq('id', data.user.id)
-        .single();
-      
-      // Redirect based on role
-      const redirectTo = userData?.role === 'hr' || userData?.role === 'admin' 
-        ? '/hr/dashboard' 
-        : '/employee/dashboard';
-      
-      router.push(redirectTo);
-      router.refresh();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Sign in failed');
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    if (error) throw error;
+    
+    // ✅ Simply redirect to /dashboard, let middleware handle role routing
+    router.push('/dashboard');
+    router.refresh();
+  } catch (err) {
+    setError(err instanceof Error ? err.message : 'Sign in failed');
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center p-8">
