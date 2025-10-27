@@ -36,28 +36,21 @@ export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
   const isProtectedRoute = pathname.startsWith('/hr/') || pathname.startsWith('/employee/') || pathname.startsWith('/compliance/')
 
-  // If user is logged in and tries to access login or root, redirect to appropriate dashboard
-  if (user && (pathname === '/login' || pathname === '/' || pathname === '/dashboard')) {
-    const { data: userData } = await supabase
-      .from('users')
-      .select('role')
-      .eq('id', user.id)
-      .single()
-    
-    const url = request.nextUrl.clone()
-    url.pathname = userData?.role === 'hr' || userData?.role === 'admin'
-      ? '/hr/dashboard'
-      : '/employee/dashboard'
-    
-    return NextResponse.redirect(url)
-  }
-
-  // If user is not logged in and tries to access protected routes, redirect to login
+  // Handle unauthenticated users trying to access protected routes
   if (!user && isProtectedRoute) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
     return NextResponse.redirect(url)
   }
+
+  // Handle authenticated users trying to access /login (redirect to dashboard)
+  if (user && pathname === '/login') {
+    const url = request.nextUrl.clone()
+    url.pathname = '/dashboard'
+    return NextResponse.redirect(url)
+  }
+
+  // Let the page handle root and dashboard routing
 
   return supabaseResponse
 }
