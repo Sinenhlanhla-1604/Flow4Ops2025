@@ -34,15 +34,20 @@ export async function middleware(request: NextRequest) {
   } = await supabase.auth.getUser()
 
   // Protect routes
-  if (!user && !request.nextUrl.pathname.startsWith('/login')) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/login'
-    return NextResponse.redirect(url)
-  }
-
   if (user && request.nextUrl.pathname.startsWith('/login')) {
+    // Fetch user role from database
+    const { data: userData } = await supabase
+      .from('users')
+      .select('role')
+      .eq('id', user.id)
+      .single()
+    
+    // Route based on role
     const url = request.nextUrl.clone()
-    url.pathname = '/employee/dashboard'
+    url.pathname = userData?.role === 'hr' || userData?.role === 'admin'
+      ? '/hr/dashboard'
+      : '/employee/dashboard'
+    
     return NextResponse.redirect(url)
   }
 
