@@ -99,12 +99,7 @@ export default async function HRDashboardPage() {
               <h2 className="text-2xl font-bold tracking-tight">HR Dashboard</h2>
               <p className="text-zinc-400">Manage compliance and track employee submissions</p>
             </div>
-            <button className="inline-flex h-9 items-center justify-center rounded-md bg-violet-600 px-4 text-sm font-medium hover:bg-violet-500">
-              <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-              </svg>
-              New Request
-            </button>
+            
           </div>
 
           {/* Stats Grid */}

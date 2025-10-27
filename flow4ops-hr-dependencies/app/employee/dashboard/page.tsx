@@ -10,7 +10,7 @@ export default async function DashboardPage() {
 
   const { data: userData } = await supabase
     .from('users')
-    .select('name, role, department')
+    .select('name, role, department, annual_leave_total, annual_leave_used, sick_leave_total, sick_leave_used')
     .eq('id', user.id)
     .single()
 
@@ -24,6 +24,16 @@ export default async function DashboardPage() {
     .from('compliance_submissions')
     .select('id, request_id')
     .eq('employee_id', user.id)
+
+  // Get leave data
+  const { data: leaveRequests } = await supabase
+    .from('leave_requests')
+    .select('*')
+    .eq('employee_id', user.id)
+  
+  const annualRemaining = (userData?.annual_leave_total || 0) - (userData?.annual_leave_used || 0)
+  const sickRemaining = (userData?.sick_leave_total || 0) - (userData?.sick_leave_used || 0)
+  const pendingLeaveRequests = leaveRequests?.filter(r => r.status === 'pending').length || 0
 
   // Create a map of submitted request IDs
   const submittedRequestIds = new Set(submissions?.map(s => s.request_id) || [])
@@ -170,28 +180,60 @@ export default async function DashboardPage() {
           {/* Two Column Layout */}
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
             <div className="col-span-4 space-y-4">
-              {/* Profile Info */}
+              {/* Leave Stats */}
               <div className="rounded-lg border border-zinc-800 bg-zinc-900/50">
                 <div className="p-6">
-                  <h3 className="text-lg font-semibold mb-4">Profile Information</h3>
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-3 gap-4">
-                      <div>
-                        <p className="text-xs font-medium text-zinc-500 uppercase">Email</p>
-                        <p className="mt-1 text-sm">{user.email}</p>
+                  <h3 className="text-lg font-semibold mb-4">Leave Balance</h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="rounded-md border border-zinc-800 bg-zinc-950 p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="text-sm font-medium text-zinc-400">Annual Leave</h4>
+                        <svg className="h-4 w-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
                       </div>
-                      <div>
-                        <p className="text-xs font-medium text-zinc-500 uppercase">Role</p>
-                        <div className="mt-1 inline-flex items-center rounded-md border border-zinc-700 bg-zinc-800 px-2.5 py-0.5 text-xs font-semibold">
-                          {userData?.role || 'Not set'}
-                        </div>
+                      <div className="text-2xl font-bold">{annualRemaining} days</div>
+                      <p className="text-xs text-zinc-500">
+                        {userData?.annual_leave_used || 0} of {userData?.annual_leave_total || 0} used
+                      </p>
+                      <div className="mt-2 w-full bg-zinc-800 rounded-full h-1.5">
+                        <div 
+                          className="bg-blue-400 h-1.5 rounded-full"
+                          style={{ width: `${((userData?.annual_leave_used || 0) / (userData?.annual_leave_total || 1)) * 100}%` }}
+                        />
                       </div>
-                      <div>
-                        <p className="text-xs font-medium text-zinc-500 uppercase">Department</p>
-                        <p className="mt-1 text-sm">{userData?.department || 'Not assigned'}</p>
+                    </div>
+                    
+                    <div className="rounded-md border border-zinc-800 bg-zinc-950 p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="text-sm font-medium text-zinc-400">Sick Leave</h4>
+                        <svg className="h-4 w-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                      </div>
+                      <div className="text-2xl font-bold">{sickRemaining} days</div>
+                      <p className="text-xs text-zinc-500">
+                        {userData?.sick_leave_used || 0} of {userData?.sick_leave_total || 0} used
+                      </p>
+                      <div className="mt-2 w-full bg-zinc-800 rounded-full h-1.5">
+                        <div 
+                          className="bg-emerald-400 h-1.5 rounded-full"
+                          style={{ width: `${((userData?.sick_leave_used || 0) / (userData?.sick_leave_total || 1)) * 100}%` }}
+                        />
                       </div>
                     </div>
                   </div>
+                  
+                  {pendingLeaveRequests > 0 && (
+                    <div className="mt-4 rounded-md border border-amber-500/20 bg-amber-500/5 p-3">
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm font-medium text-amber-400">
+                          {pendingLeaveRequests} {pendingLeaveRequests === 1 ? 'request' : 'requests'} pending approval
+                        </p>
+                        <Link href="/employee/leave" className="text-xs text-amber-400 hover:text-amber-300">View →</Link>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 
