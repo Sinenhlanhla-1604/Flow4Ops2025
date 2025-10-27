@@ -16,6 +16,11 @@ export default async function DashboardPage() {
     .eq('id', user.id)
     .single()
 
+  // DEBUG - Remove after testing
+  console.log('User email:', user.email)
+  console.log('User role from database:', userData?.role)
+  console.log('Will redirect to:', userData?.role === 'hr' ? '/hr/dashboard' : '/employee/dashboard')
+
   // Redirect based on role
   if (userData?.role === 'hr' || userData?.role === 'admin') {
     redirect('/hr/dashboard')
