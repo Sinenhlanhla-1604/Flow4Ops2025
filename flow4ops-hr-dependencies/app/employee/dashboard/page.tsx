@@ -69,11 +69,10 @@ export default async function DashboardPage() {
               <span className="font-bold">Flow4Ops</span>
             </Link>
             <nav className="flex items-center space-x-6 text-sm font-medium">
-              <Link href="/employee/dashboard" className="text-emerald-400 transition-colors">Overview</Link>
-              <Link href="/compliance/submit" className="text-zinc-400 transition-colors hover:text-zinc-100">Compliance</Link>
-              {userData?.role === 'hr' && (
-                <Link href="/hr/compliance" className="text-zinc-400 transition-colors hover:text-zinc-100">HR Dashboard</Link>
-              )}
+              <Link href="/employee/dashboard" className="text-emerald-400 transition-colors">Home</Link>
+              <Link href="/employee/compliance" className="text-zinc-400 transition-colors hover:text-zinc-100">Compliance</Link>
+              <Link href="/employee/leave" className="text-zinc-400 transition-colors hover:text-zinc-100">Leave</Link>
+              <Link href="/employee/surveys" className="text-zinc-400 transition-colors hover:text-zinc-100">Surveys</Link>
             </nav>
           </div>
           <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
