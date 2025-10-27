@@ -34,15 +34,16 @@ export async function middleware(request: NextRequest) {
   } = await supabase.auth.getUser()
 
   // Protect routes
-  if (user && request.nextUrl.pathname.startsWith('/login')) {
-    // Fetch user role from database
+  if (user && (
+    request.nextUrl.pathname.startsWith('/login') || 
+    request.nextUrl.pathname === '/dashboard'
+  )) {
     const { data: userData } = await supabase
       .from('users')
       .select('role')
       .eq('id', user.id)
       .single()
     
-    // Route based on role
     const url = request.nextUrl.clone()
     url.pathname = userData?.role === 'hr' || userData?.role === 'admin'
       ? '/hr/dashboard'
