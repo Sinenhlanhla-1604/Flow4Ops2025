@@ -125,7 +125,7 @@ export default function LoginPage() {
           {/* Beta Notice */}
           <div className="mt-6 p-4 bg-violet-500/5 border border-violet-500/20 rounded-xl">
             <p className="text-xs text-center text-zinc-400">
-              🚀 Flow4Ops is currently in private beta. Request access to get started.
+               Flow4Ops is currently in private beta. Request access to get started.
             </p>
           </div>
         </div>
