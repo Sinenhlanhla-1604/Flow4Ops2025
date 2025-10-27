@@ -33,11 +33,11 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // Protect routes
-  if (user && (
-    request.nextUrl.pathname.startsWith('/login') || 
-    request.nextUrl.pathname === '/dashboard'
-  )) {
+  const pathname = request.nextUrl.pathname
+  const isProtectedRoute = pathname.startsWith('/hr/') || pathname.startsWith('/employee/') || pathname.startsWith('/compliance/')
+
+  // If user is logged in and tries to access login or root, redirect to appropriate dashboard
+  if (user && (pathname === '/login' || pathname === '/' || pathname === '/dashboard')) {
     const { data: userData } = await supabase
       .from('users')
       .select('role')
@@ -49,6 +49,13 @@ export async function middleware(request: NextRequest) {
       ? '/hr/dashboard'
       : '/employee/dashboard'
     
+    return NextResponse.redirect(url)
+  }
+
+  // If user is not logged in and tries to access protected routes, redirect to login
+  if (!user && isProtectedRoute) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/login'
     return NextResponse.redirect(url)
   }
 
