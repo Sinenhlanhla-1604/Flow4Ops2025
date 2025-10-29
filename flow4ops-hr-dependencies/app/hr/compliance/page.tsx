@@ -55,10 +55,12 @@ export default async function HRCompliancePage() {
               <span className="font-bold">Flow4Ops</span>
             </Link>
             <nav className="flex items-center space-x-6 text-sm font-medium">
-              <Link href="/hr/dashboard" className="text-zinc-400 transition-colors hover:text-zinc-100">Home</Link>
-              <Link href="/hr/compliance" className="text-emerald-400 transition-colors">Compliance</Link>
-              <Link href="/hr/leave" className="text-zinc-400 transition-colors hover:text-zinc-100">Leave</Link>
+              <Link href="/hr/dashboard" className="text-zinc-400 transition-colors">Home</Link>
+              <Link href="/hr/leave" className="text-zinc-400 transition-colors hover:text-zinc-100">Leave Requests</Link>
+              <Link href="/hr/compliance" className="text-zinc-400 transition-colors hover:text-zinc-100">Compliance</Link>
               <Link href="/hr/surveys" className="text-zinc-400 transition-colors hover:text-zinc-100">Surveys</Link>
+              <Link href="/hr/payroll" className="text-zinc-400 transition-colors hover:text-zinc-100">Payroll</Link>
+              <Link href="/hr/employeeInfo" className="text-zinc-400 transition-colors hover:text-zinc-100">Employees</Link>
             </nav>
           </div>
           <div className="flex flex-1 items-center justify-end space-x-2">
