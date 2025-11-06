@@ -41,8 +41,8 @@ export default function LoginPage() {
         {/* Logo/Brand */}
         <div className="text-center mb-12">
           {/* <img src="/logo.png" alt="Flow4Ops Logo" className="mx-auto mb-6 h-12" /> */}
-          <h1 className="text-5xl font-bold tracking-tight mb-3">Flow4Ops</h1>
-          <p className="text-zinc-400 text-lg">Simplify operations. Amplify execution.</p>
+          <h1 className="text-5xl font-bold tracking-tight mb-3">Flow4HR</h1>
+          <p className="text-zinc-400 text-lg">Simple HR. Smart workflows.</p>
         </div>
 
         {/* Login Card */}
